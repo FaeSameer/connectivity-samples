@@ -63,19 +63,30 @@ public class DeviceScanActivity extends ListActivity {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
+        else{
+            Toast.makeText(this, "BLE supported", Toast.LENGTH_SHORT).show();
+        }
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
-
+        Toast.makeText(this, "here1", Toast.LENGTH_SHORT).show();
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+        final Intent intent = new Intent(this, DeviceControlActivity.class);
+        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, "BT05");
+        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, "D0:FF:50:70:00:70");
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -147,8 +158,8 @@ public class DeviceScanActivity extends ListActivity {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
         final Intent intent = new Intent(this, DeviceControlActivity.class);
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, "BT05");
+        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, "D0:FF:50:70:00:70");
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
